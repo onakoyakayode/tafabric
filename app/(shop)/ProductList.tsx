@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
-import type { Product } from "@/app/generated/prisma/client";
+// import type { Product } from "@/app/generated/prisma/client";
 
 type ProductCardData = {
   id: string;

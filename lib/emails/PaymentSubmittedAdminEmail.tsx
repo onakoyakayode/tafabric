@@ -1,4 +1,4 @@
-import { Order, OrderItem } from "@/app/generated/prisma/client";
+import { Order, OrderItem } from "../../app/generated/prisma/client";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 

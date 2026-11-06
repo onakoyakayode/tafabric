@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import type { OrderStatus } from "@/app/generated/prisma/client";
+import type { OrderStatus } from "../../../app/generated/prisma/client";
 
 const OPTIONS: OrderStatus[] = [
   "PENDING_PAYMENT",

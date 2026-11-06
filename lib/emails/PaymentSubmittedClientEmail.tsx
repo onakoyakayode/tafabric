@@ -1,4 +1,4 @@
-import type { Order } from "@/app/generated/prisma/client";
+import type { Order } from "../../app/generated/prisma/client";
 
 export default function PaymentSubmittedClientEmail({
   order,
