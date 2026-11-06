@@ -8,18 +8,3 @@ export async function GET() {
   });
   return NextResponse.json(orders);
 }
-
-export async function DELETE(
-  _req: Request,
-  { params }: { params: Promise<{ orderId: string }> },
-) {
-  const { orderId } = await params;
-
-  const existing = await db.order.findUnique({ where: { orderId } });
-  if (!existing) {
-    return NextResponse.json({ error: "Order not found" }, { status: 404 });
-  }
-
-  await db.order.delete({ where: { orderId } });
-  return NextResponse.json({ success: true });
-}

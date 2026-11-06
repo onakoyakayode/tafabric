@@ -17,8 +17,9 @@ const schema = z.object({
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
+  const { id } = await params;
   const body = await req.json();
   const parsed = schema.safeParse(body);
   if (!parsed.success)
@@ -28,7 +29,7 @@ export async function PATCH(
     );
 
   const product = await db.product.update({
-    where: { id: params.id },
+    where: { id },
     data: parsed.data,
   });
   revalidateTag("products", "max");
@@ -37,8 +38,9 @@ export async function PATCH(
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  await db.product.delete({ where: { id: params.id } });
+  const { id } = await params;
+  await db.product.delete({ where: { id } });
   return NextResponse.json({ success: true });
 }
