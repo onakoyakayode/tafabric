@@ -1,8 +1,6 @@
 import { Resend } from "resend";
 import type { ReactElement } from "react";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function sendEmail({
   to,
   subject,
@@ -12,6 +10,7 @@ export async function sendEmail({
   subject: string;
   react: ReactElement;
 }) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const { data, error } = await resend.emails.send({
     from: "TA Fabrics <onboarding@resend.dev>",
     to,
