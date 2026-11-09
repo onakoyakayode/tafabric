@@ -5,30 +5,31 @@ import bcrypt from "bcryptjs";
 const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 const COOKIE = "admin_session";
 const FALLBACK_HASH =
-  "$2b$10$oSs.DI8jU/ApXONF7DjE8.L7dW//7ejGjzRjyMcmepUGFgqr5D9Nm";
+  "$2b$10$G1JsYuWqVhAmvd4lotR/YO5TvvJdBFIUAcJLN4pTyedD8hyzq8ubq";
 
 export async function verifyCredentials(username: string, password: string) {
   const envUser = process.env.ADMIN_USERNAME;
   const envHash = process.env.ADMIN_PASSWORD_HASH;
-  // bcrypt hashes are always 60 chars and start with $2b$10$
-  const hash = envHash && envHash.length === 60 ? envHash : FALLBACK_HASH;
 
-  console.log("[auth] envUser:", JSON.stringify(envUser));
-  console.log(
-    "[auth] envHash length:",
-    envHash?.length,
-    "prefix:",
-    envHash?.slice(0, 7),
-  );
-  console.log("[auth] using hash of length:", hash.length);
-
-  if (username !== envUser) {
-    console.log("[auth] FAIL: username mismatch");
+  if (!envUser || !envHash) {
+    console.error("[auth] Missing admin environment variables");
     return false;
   }
 
-  const isMatch = await bcrypt.compare(password, hash);
-  console.log("[auth] isMatch:", isMatch);
+  if (username.trim() !== envUser.trim()) {
+    console.log("[auth] Username mismatch");
+    return false;
+  }
+
+  if (!envHash.startsWith("$2") || envHash.length !== 60) {
+    console.error("[auth] Invalid bcrypt hash configuration");
+    return false;
+  }
+
+  const isMatch = await bcrypt.compare(password, envHash);
+
+  console.log("[auth] Password verification:", isMatch);
+
   return isMatch;
 }
 
